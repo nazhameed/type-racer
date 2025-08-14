@@ -132,24 +132,3 @@ body {
         padding-bottom: 10px !important;
     }
 }
-
-/* Responsive font sizing */
-@media (max-width: 768px) {
-    .navbar-brand {
-        font-size: 1.8rem;
-    }
-    
-    .navbar {
-        padding-bottom: 15px !important;
-    }
-}
-
-@media (max-width: 480px) {
-    .navbar-brand {
-        font-size: 1.5rem;
-    }
-    
-    .navbar {
-        padding-bottom: 10px !important;
-    }
-}

@@ -51,19 +51,25 @@ function updateText() {
     
     // For simple display without highlighting, just use textContent
     document.querySelector('.prompt-text').textContent = newText;
-    document.getElementById('levelResult').textContent = 
-        difficulty === 'Choose...' ? '-' : difficulty;
+    
+    // Capitalize the difficulty for display
+    let displayDifficulty = '-';
+    if (difficulty !== 'Choose...') {
+        displayDifficulty = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+    }
+    
+    document.getElementById('levelResult').textContent = displayDifficulty;
 }
 
 // Prepare text for highlighting (called when test starts)
 function prepareTextForHighlighting() {
     const promptElement = document.querySelector('.prompt-text');
-    const text = currentText; // Use stored text instead of getting it from element
+    const text = currentText;
     
     // Split text into words and wrap each in a span for highlighting
     const words = text.split(' ');
-    const wrappedText = words.map((word, index) => 
-        `<span class="word" data-index="${index}">${word}</span>`
+    const wrappedText = words.map(word => 
+        `<span class="word">${word}</span>`
     ).join(' ');
     
     promptElement.innerHTML = wrappedText;
@@ -80,10 +86,17 @@ function startTest() {
     
     // Get new text and reset everything
     updateText();
-    prepareTextForHighlighting(); // Only wrap in spans when test starts
     document.getElementById('typingInput').value = '';
     document.getElementById('typingInput').disabled = false;
     document.getElementById('typingInput').focus();
+    
+    // Start the actual test
+    beginTest();
+}
+
+// Begin the actual test (shared logic)
+function beginTest() {
+    prepareTextForHighlighting();
     document.getElementById('timeResult').textContent = '0s';
     document.getElementById('wpmResult').textContent = '0';
     
@@ -105,15 +118,8 @@ function handleTypingStart() {
             return;
         }
         
-        // Prepare for test
-        prepareTextForHighlighting();
-        document.getElementById('timeResult').textContent = '0s';
-        document.getElementById('wpmResult').textContent = '0';
-        
-        // Start the timer
-        startTime = Date.now();
-        testRunning = true;
-        timer = setInterval(updateTimer, 100);
+        // Start the actual test
+        beginTest();
     }
     
     // Continue with normal typing feedback
@@ -134,6 +140,8 @@ function stopTest() {
     testRunning = false;
     clearInterval(timer);
     document.getElementById('typingInput').disabled = true;
+    
+    // Always try to calculate WPM (calculateWPM will handle empty input)
     calculateWPM();
     
     // Reset text display to original format (but keep same text)
@@ -154,6 +162,10 @@ function calculateWPM() {
     
     const elapsed = (Date.now() - startTime) / 60000; // minutes
     const typed = document.getElementById('typingInput').value.trim();
+    
+    // Only calculate if user typed meaningful content (more than just spaces)
+    if (typed.length === 0) return;
+    
     const words = typed.split(' ').length;
     const wpm = Math.round(words / elapsed);
     
@@ -209,7 +221,10 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => {
             updateText(); // Get new text
             document.getElementById('typingInput').value = '';
-            document.getElementById('typingInput').disabled = false; // Re-enable the input
+            document.getElementById('typingInput').disabled = false;
+            // Reset results display
+            document.getElementById('timeResult').textContent = '0s';
+            document.getElementById('wpmResult').textContent = '0';
             document.getElementById('typingInput').focus();
         }, 100);
     });
