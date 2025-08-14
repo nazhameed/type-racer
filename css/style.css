@@ -4,6 +4,12 @@ body {
     font-family: 'Nunito', sans-serif;
 }
 
+.custom-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
 .navbar {
     background-color: #ff8400 !important;
     padding-bottom: 20px !important;
@@ -14,17 +20,97 @@ body {
     font-size: 2.5rem;
 }
 
-.btn-primary {
+/* All buttons - unified styling */
+.btn-primary, .btn-success, .btn-danger, .btn-secondary {
     background-color: white !important;
-    border-color: white !important;
     color: black !important;
+    border: 2px solid #ff8400 !important;
     border-radius: 4px !important;
 }
 
-/* Custom styling for instruction text */
+.btn-primary:hover, .btn-success:hover, .btn-danger:hover, .btn-secondary:hover {
+    background-color: #ff8400 !important;
+    color: white !important;
+}
+
 .instruction-text {
     font-weight: bold;
     font-size: 1.25rem;
+}
+
+.prompt-box {
+    background-color: #f8f9fa;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.prompt-text {
+    font-size: 1.1rem;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.typing-input {
+    font-size: 1.1rem;
+    resize: vertical;
+}
+
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.results-card {
+    border: 2px solid #ff8400;
+    border-radius: 12px;
+    padding: 20px;
+    background-color: white;
+    text-align: center;
+     box-shadow: 0 0 10px rgba(255, 138, 0, 0.6);
+}
+
+.results-title {
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: black;
+}
+
+.result-item {
+    margin-bottom: 10px;
+}
+
+.result-label {
+    font-weight: 500;
+    color: black;
+}
+
+.result-value {
+    font-weight: bold;
+    color: black;
+}
+
+/* Responsive font sizing */
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1.8rem;
+    }
+    
+    .navbar {
+        padding-bottom: 15px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar-brand {
+        font-size: 1.5rem;
+    }
+    
+    .navbar {
+        padding-bottom: 10px !important;
+    }
 }
 
 /* Responsive font sizing */
