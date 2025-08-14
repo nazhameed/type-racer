@@ -112,6 +112,20 @@ body {
     color: black;
 }
 
+.best-result-item {
+    margin-bottom: 10px;
+}
+
+.best-level-label {
+    font-weight: 500;
+    color: black;
+}
+
+.best-result-value {
+    font-weight: bold;
+    color: #ff8400;
+}
+
 /* Responsive font sizing */
 @media (max-width: 768px) {
     .navbar-brand {

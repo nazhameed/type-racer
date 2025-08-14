@@ -31,6 +31,13 @@ let timer = null;
 let testRunning = false;
 let currentText = '';
 
+// Best results storage
+let bestResults = {
+    easy: 0,
+    medium: 0,
+    difficult: 0
+};
+
 // Get random text based on difficulty
 function getRandomText(difficulty) {
     if (difficulty === 'Choose...') {
@@ -170,6 +177,47 @@ function calculateWPM() {
     const wpm = Math.round(words / elapsed);
     
     document.getElementById('wpmResult').textContent = wpm;
+    
+    // Check if this is a new best result
+    checkAndUpdateBestResult(wpm);
+}
+
+// Check if current WPM is a new best result and update if so
+function checkAndUpdateBestResult(wpm) {
+    const difficulty = document.getElementById('difficultySelect').value;
+    
+    // Only update if we have a valid difficulty and WPM is better than current best
+    if (difficulty !== 'Choose...' && wpm > bestResults[difficulty]) {
+        bestResults[difficulty] = wpm;
+        saveBestResults();
+        updateBestResultsDisplay();
+        
+        // Show congratulations message
+        setTimeout(() => {
+            alert(`New best result for ${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}: ${wpm} WPM!`);
+        }, 500);
+    }
+}
+
+// Save best results to localStorage
+function saveBestResults() {
+    localStorage.setItem('typeRacerBestResults', JSON.stringify(bestResults));
+}
+
+// Load best results from localStorage
+function loadBestResults() {
+    const saved = localStorage.getItem('typeRacerBestResults');
+    if (saved) {
+        bestResults = JSON.parse(saved);
+    }
+    updateBestResultsDisplay();
+}
+
+// Update the best results display
+function updateBestResultsDisplay() {
+    document.getElementById('bestEasy').textContent = bestResults.easy > 0 ? bestResults.easy + ' WPM' : '-';
+    document.getElementById('bestMedium').textContent = bestResults.medium > 0 ? bestResults.medium + ' WPM' : '-';
+    document.getElementById('bestDifficult').textContent = bestResults.difficult > 0 ? bestResults.difficult + ' WPM' : '-';
 }
 
 // Check typing progress and provide real-time feedback
@@ -238,4 +286,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Set initial text and enable typing area
     updateText();
     document.getElementById('typingInput').disabled = false;
+    
+    // Load best results from localStorage
+    loadBestResults();
 });
