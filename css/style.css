@@ -1,0 +1,44 @@
+/* Type Racer Styles */
+
+body {
+    font-family: 'Nunito', sans-serif;
+}
+
+.navbar {
+    background-color: #ff8400 !important;
+    padding-bottom: 20px !important;
+}
+
+.navbar-brand {
+    font-family: 'Alegreya', serif;
+    font-size: 2.5rem;
+}
+
+.btn-primary {
+    background-color: white !important;
+    border-color: white !important;
+    color: black !important;
+    border-radius: 4px !important;
+    font-weight: bold !important;
+}
+
+/* Responsive font sizing */
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1.8rem;
+    }
+    
+    .navbar {
+        padding-bottom: 15px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar-brand {
+        font-size: 1.5rem;
+    }
+    
+    .navbar {
+        padding-bottom: 10px !important;
+    }
+}
