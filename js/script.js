@@ -29,6 +29,7 @@ const texts = {
 let startTime = null;
 let timer = null;
 let testRunning = false;
+let currentText = '';
 
 // Get random text based on difficulty
 function getRandomText(difficulty) {
@@ -45,6 +46,9 @@ function updateText() {
     const difficulty = document.getElementById('difficultySelect').value;
     const newText = getRandomText(difficulty);
     
+    // Store the current text
+    currentText = newText;
+    
     // For simple display without highlighting, just use textContent
     document.querySelector('.prompt-text').textContent = newText;
     document.getElementById('levelResult').textContent = 
@@ -54,7 +58,7 @@ function updateText() {
 // Prepare text for highlighting (called when test starts)
 function prepareTextForHighlighting() {
     const promptElement = document.querySelector('.prompt-text');
-    const text = promptElement.textContent;
+    const text = currentText; // Use stored text instead of getting it from element
     
     // Split text into words and wrap each in a span for highlighting
     const words = text.split(' ');
@@ -116,6 +120,15 @@ function handleTypingStart() {
     checkTyping();
 }
 
+// Handle Enter key press to stop test
+function handleKeyPress(event) {
+    // Check if Enter key was pressed and test is running
+    if (event.key === 'Enter' && testRunning) {
+        event.preventDefault(); // Prevent new line in textarea
+        stopTest();
+    }
+}
+
 // Stop the typing test
 function stopTest() {
     testRunning = false;
@@ -123,8 +136,8 @@ function stopTest() {
     document.getElementById('typingInput').disabled = true;
     calculateWPM();
     
-    // Reset text display to original format
-    updateText();
+    // Reset text display to original format (but keep same text)
+    document.querySelector('.prompt-text').textContent = currentText;
 }
 
 // Update the timer display
@@ -152,7 +165,7 @@ function checkTyping() {
     if (!testRunning) return;
     
     const typed = document.getElementById('typingInput').value;
-    const originalText = document.querySelector('.prompt-text').textContent;
+    const originalText = currentText; // Use stored text instead of getting from element
     
     // Check if finished
     if (typed === originalText) {
@@ -194,14 +207,18 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('retryBtn').addEventListener('click', function() {
         stopTest();
         setTimeout(() => {
-            updateText();
+            updateText(); // Get new text
             document.getElementById('typingInput').value = '';
+            document.getElementById('typingInput').disabled = false; // Re-enable the input
             document.getElementById('typingInput').focus();
         }, 100);
     });
     
     // Auto-start test when user begins typing
     document.getElementById('typingInput').addEventListener('input', handleTypingStart);
+    
+    // Stop test when user presses Enter key
+    document.getElementById('typingInput').addEventListener('keydown', handleKeyPress);
     
     // Set initial text and enable typing area
     updateText();
