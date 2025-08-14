@@ -45,9 +45,24 @@ function updateText() {
     const difficulty = document.getElementById('difficultySelect').value;
     const newText = getRandomText(difficulty);
     
+    // For simple display without highlighting, just use textContent
     document.querySelector('.prompt-text').textContent = newText;
     document.getElementById('levelResult').textContent = 
         difficulty === 'Choose...' ? '-' : difficulty;
+}
+
+// Prepare text for highlighting (called when test starts)
+function prepareTextForHighlighting() {
+    const promptElement = document.querySelector('.prompt-text');
+    const text = promptElement.textContent;
+    
+    // Split text into words and wrap each in a span for highlighting
+    const words = text.split(' ');
+    const wrappedText = words.map((word, index) => 
+        `<span class="word" data-index="${index}">${word}</span>`
+    ).join(' ');
+    
+    promptElement.innerHTML = wrappedText;
 }
 
 // Start the typing test
@@ -61,6 +76,7 @@ function startTest() {
     
     // Get new text and reset everything
     updateText();
+    prepareTextForHighlighting(); // Only wrap in spans when test starts
     document.getElementById('typingInput').value = '';
     document.getElementById('typingInput').disabled = false;
     document.getElementById('typingInput').focus();
@@ -73,12 +89,42 @@ function startTest() {
     timer = setInterval(updateTimer, 100);
 }
 
+// Auto-start test when user begins typing
+function handleTypingStart() {
+    // If test is not running and user starts typing, start the test
+    if (!testRunning) {
+        const difficulty = document.getElementById('difficultySelect').value;
+        
+        if (difficulty === 'Choose...') {
+            alert('Please select a difficulty level first!');
+            document.getElementById('typingInput').value = '';
+            return;
+        }
+        
+        // Prepare for test
+        prepareTextForHighlighting();
+        document.getElementById('timeResult').textContent = '0s';
+        document.getElementById('wpmResult').textContent = '0';
+        
+        // Start the timer
+        startTime = Date.now();
+        testRunning = true;
+        timer = setInterval(updateTimer, 100);
+    }
+    
+    // Continue with normal typing feedback
+    checkTyping();
+}
+
 // Stop the typing test
 function stopTest() {
     testRunning = false;
     clearInterval(timer);
     document.getElementById('typingInput').disabled = true;
     calculateWPM();
+    
+    // Reset text display to original format
+    updateText();
 }
 
 // Update the timer display
@@ -101,17 +147,40 @@ function calculateWPM() {
     document.getElementById('wpmResult').textContent = wpm;
 }
 
-// Check if user finished typing
-function checkIfDone() {
+// Check typing progress and provide real-time feedback
+function checkTyping() {
     if (!testRunning) return;
     
     const typed = document.getElementById('typingInput').value;
-    const target = document.querySelector('.prompt-text').textContent;
+    const originalText = document.querySelector('.prompt-text').textContent;
     
-    if (typed === target) {
+    // Check if finished
+    if (typed === originalText) {
         stopTest();
         alert('Great job! You finished the test!');
+        return;
     }
+    
+    // Update word highlighting
+    const typedWords = typed.split(' ');
+    const targetWords = originalText.split(' ');
+    const wordSpans = document.querySelectorAll('.prompt-text .word');
+    
+    // Reset and update each word
+    wordSpans.forEach((span, index) => {
+        span.className = 'word';
+        
+        if (index < typedWords.length) {
+            const typedWord = typedWords[index];
+            const targetWord = targetWords[index];
+            
+            if (typedWord === targetWord) {
+                span.classList.add('correct');
+            } else {
+                span.classList.add('incorrect');
+            }
+        }
+    });
 }
 
 // When page loads, set up everything
@@ -124,12 +193,17 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('stopBtn').addEventListener('click', stopTest);
     document.getElementById('retryBtn').addEventListener('click', function() {
         stopTest();
-        setTimeout(startTest, 100);
+        setTimeout(() => {
+            updateText();
+            document.getElementById('typingInput').value = '';
+            document.getElementById('typingInput').focus();
+        }, 100);
     });
     
-    // Check if done while typing
-    document.getElementById('typingInput').addEventListener('input', checkIfDone);
+    // Auto-start test when user begins typing
+    document.getElementById('typingInput').addEventListener('input', handleTypingStart);
     
-    // Set initial text
+    // Set initial text and enable typing area
     updateText();
+    document.getElementById('typingInput').disabled = false;
 });

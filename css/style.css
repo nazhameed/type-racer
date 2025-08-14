@@ -49,6 +49,26 @@ body {
     font-size: 1.1rem;
     margin: 0;
     line-height: 1.6;
+    font-family: monospace;
+    white-space: pre-wrap;
+}
+
+.prompt-text .word {
+    padding: 2px 1px;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.prompt-text .correct {
+    background-color: #007bff;
+    color: white;
+}
+
+.prompt-text .incorrect {
+    background-color: #dc3545;
+    color: white;
 }
 
 .typing-input {
