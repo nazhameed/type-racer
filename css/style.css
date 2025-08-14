@@ -19,7 +19,12 @@ body {
     border-color: white !important;
     color: black !important;
     border-radius: 4px !important;
-    font-weight: bold !important;
+}
+
+/* Custom styling for instruction text */
+.instruction-text {
+    font-weight: bold;
+    font-size: 1.25rem;
 }
 
 /* Responsive font sizing */
