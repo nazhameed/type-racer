@@ -25,7 +25,7 @@
             <div class="container">
                 <div class="mx-auto text-center">
                     <span class="navbar-brand text-white d-block">Type Racer</span>
-                    <button class="btn btn-primary">Instructions</button>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#instructionsModal">Instructions</button>
                 </div>
             </div>
         </nav>
@@ -91,6 +91,36 @@
             </div>
         </div>
     </main>
+    
+    <!-- Instructions Modal -->
+    <div class="modal fade" id="instructionsModal" tabindex="-1" aria-labelledby="instructionsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="instructionsModalLabel">How to Use Type Racer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ol class="mb-3">
+                        <li>Select a difficulty level</li>
+                        <li>Start typing to begin the test automatically</li>
+                        <li>Press <kbd>Enter</kbd> to stop the test</li>
+                        <li>Use <strong>Retry</strong> for a new text</li>
+                    </ol>
+                    
+                    <p class="mb-3">
+                        <span class="badge bg-primary me-2">Blue</span>Correct words
+                        <span class="badge bg-danger me-2 ms-3">Red</span>Incorrect words
+                    </p>
+                    
+                    <p class="mb-0"><strong>Tip:</strong> Focus on accuracy first, then speed!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Got it!</button>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
